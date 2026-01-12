@@ -4,8 +4,9 @@
 
 Project ini adalah **AI Chatbot** berbasis web yang mensimulasikan karakter **Paimon** dari game *Genshin Impact*. Dibangun menggunakan **Python (FastAPI)** dan **Google Gemini 1.5 Flash**, chatbot ini memiliki antarmuka (UI) bertema Teyvat yang imersif dan kemampuan mengingat konteks percakapan.
 
-![Project Screenshot](https://via.placeholder.com/800x400?text=Screenshot+Chatbot+Kamu+Disini)
-*(Ganti gambar ini dengan screenshot tampilan aplikasimu nanti)*
+![Project Screenshot](![Uploading image.png…]()
+)
+
 
 ## 🚀 Fitur Utama
 
