@@ -2,7 +2,7 @@
 
 > *"Ad Astra Abyssosque! Welcome to the Adventurers' Guild!"*
 
-Project ini adalah **AI Chatbot** berbasis web yang mensimulasikan karakter **Paimon** dari game *Genshin Impact*. Dibangun menggunakan **Python (FastAPI)** dan **Google Gemini 1.5 Flash**, chatbot ini memiliki antarmuka (UI) bertema Teyvat yang imersif dan kemampuan mengingat konteks percakapan.
+Project ini adalah **AI Chatbot** berbasis web yang mensimulasikan karakter **Paimon** dari game *Genshin Impact*. Dibangun menggunakan **Python (FastAPI)** dan **Google Gemini 2.5 Flash**, chatbot ini memiliki antarmuka (UI) bertema Teyvat yang imersif dan kemampuan mengingat konteks percakapan.
 
 ![Project Screenshot](https://github.com/ReihanMursyidi/paimon-chatbot/blob/main/Screenshot%202026-01-12%20195040.png)
 
