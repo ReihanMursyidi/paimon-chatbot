@@ -66,7 +66,7 @@ Project ini membutuhkan Gemini API Key agar berfungsi.
 3. Isi file .env dengan format berikut:
 
 ```
-GEMINI_API_KEY=Tempel_API_Key_Google_Kamu_Disini
+GOOGLE_API_KEY = Tempel_API_Key_Google_Kamu_Disini
 ```
 
 ### 6. Jalankan Server
