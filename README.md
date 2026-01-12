@@ -39,6 +39,44 @@ git clone https://github.com/ReihanMursyidi/paimon-chatbot.git
 cd paimon-chatbot
 ```
 
+### 3. Setup Virtual Environment (Disarankan)
+Agar library tidak berantakan, gunakan lingkungan virtual:
+
+Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+Mac/Linux:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 4. Install Dependencies
+Install semua library yang diperlukan (FastAPI, Google GenAI, dll):
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Konfigurasi API Key
+Project ini membutuhkan Gemini API Key agar berfungsi.
+1. Dapatkan API Key gratis di Google AI Studio.
+2. Duplikasi file .env.example menjadi .env (jika ada), atau buat file baru bernama .env.
+3. Isi file .env dengan format berikut:
+
+```
+GEMINI_API_KEY=Tempel_API_Key_Google_Kamu_Disini
+```
+
+### 6. Jalankan Server
+Jalankan perintah berikut untuk menyalakan server lokal:
+```bash
+python main.py
+```
+Jika berhasil, akan muncul pesan: Uvicorn running on http://127.0.0.1:8000
+
+
 ## 📂 Struktur Folder
 
 ```text
