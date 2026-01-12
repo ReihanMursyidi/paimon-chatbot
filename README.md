@@ -18,7 +18,7 @@ Project ini adalah **AI Chatbot** berbasis web yang mensimulasikan karakter **Pa
 ## 🛠️ Tech Stack
 
 * **Backend:** Python 3.10+, FastAPI, Uvicorn
-* **AI Model:** Google Gen AI SDK (`google-genai` v1.0+) - Gemini 1.5 Flash
+* **AI Model:** Google Gen AI SDK (`google-genai` v1.0+) - Gemini 2.5 Flash
 * **Frontend:** HTML5, Jinja2 Templates, Vanilla JavaScript
 * **Styling:** Tailwind CSS (via CDN), FontAwesome
 * **Environment:** Python-dotenv
