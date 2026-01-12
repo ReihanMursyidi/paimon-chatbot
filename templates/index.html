@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genshin AI Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            theme: {
+                extend: {
+                    colors: {
+                        genshin: {
+                            dark: '#1a1b33',     // Biru langit malam
+                             darker: '#121326',  // Biru lebih gelap
+                            gold: '#d3bc8e',    // Emas UI Genshin
+                            cyan: '#61e2ff',    // Biru terang (Anemo/Cryo)
+                            cream: '#f2ece2'    // Putih gading untuk teks
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Background ala Genshin Impact (Langit malam) */
+        body {
+            background: radial-gradient(ellipse at top, #2a2d55 0%, #1a1b33 50%, #121326 100%);
+            color: #f2ece2; /* Warna teks default cream */
+        }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Animasi loading dengan warna emas */
+        .dot-flashing {
+            position: relative; width: 6px; height: 6px; border-radius: 5px;
+            background-color: #d3bc8e; color: #d3bc8e;
+            animation: dot-flashing 1s infinite linear alternate;
+            animation-delay: 0.5s;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: ""; display: inline-block; position: absolute; top: 0;
+            width: 6px; height: 6px; border-radius: 5px; background-color: #d3bc8e; color: #d3bc8e;
+            animation: dot-flashing 1s infinite alternate;
+        }
+        .dot-flashing::before { left: -10px; animation-delay: 0s; }
+        .dot-flashing::after { left: 10px; animation-delay: 1s; }
+        @keyframes dot-flashing { 0% { background-color: #d3bc8e; } 50%, 100% { background-color: #8f7c55; } }
+
+        /* Efek Glassmorphism untuk UI */
+        .glass-ui {
+            background: rgba(26, 27, 51, 0.6); /* Biru tua transparan */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(211, 188, 142, 0.3); /* Border emas tipis */
+        }
+
+        /* --- TAMBAHAN BARU: Animasi Paimon Melayang --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .paimon-float {
+            animation: float 3s ease-in-out infinite;
+            /* Menambahkan sedikit glow emas di sekeliling Paimon */
+            filter: drop-shadow(0 0 15px rgba(211, 188, 142, 0.4));
+        }
+    </style>
+</head>
+<body class="font-sans h-screen flex flex-col items-center overflow-hidden">
+
+    <div id="welcome-screen" class="flex-1 flex flex-col items-center justify-center text-center p-4 transition-opacity duration-500 z-10">
+        <div class="mb-4 paimon-float">
+            <img src="/static/Genshin_Impact_HoYoLAB.webp" 
+                alt="Paimon Icon" 
+                class="w-40 h-40 object-cover rounded-full mx-auto shadow-[0_0_20px_rgba(211,188,142,0.6)]">
+        </div>
+        <div class="mb-6">
+            <span class="text-5xl bg-gradient-to-r from-genshin-gold via-yellow-200 to-genshin-cyan bg-clip-text text-transparent font-bold drop-shadow-lg">
+                Ad Astra Abyssosque!
+            </span>
+        </div>
+        <p class="text-2xl text-genshin-gold/80 font-medium tracking-wide">Traveler, ada yang bisa Paimon bantu?</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12 w-full max-w-2xl text-left">
+            <button onclick="fillInput('Di mana lokasi Cecilia Flower?')" class="glass-ui p-4 rounded-xl hover:bg-genshin-dark/50 transition text-sm text-genshin-cream/90 group">
+                <i class="fa-solid fa-location-dot text-genshin-gold mr-2 group-hover:text-genshin-cyan transition"></i> Di mana lokasi Cecilia Flower?
+            </button>
+            <button onclick="fillInput('Ceritakan sejarah Archon War')" class="glass-ui p-4 rounded-xl hover:bg-genshin-dark/50 transition text-sm text-genshin-cream/90 group">
+                <i class="fa-solid fa-book-open text-genshin-gold mr-2 group-hover:text-genshin-cyan transition"></i> Ceritakan sejarah Archon War
+            </button>
+        </div>
+    </div>
+
+    <div id="chat-container" class="flex-1 w-full max-w-3xl overflow-y-auto p-4 space-y-6 hidden no-scrollbar pb-32 z-10">
+        </div>
+
+    <div class="w-full max-w-3xl px-4 pb-6 pt-10 fixed bottom-0 from-genshin-darker via-genshin-darker/90 to-transparent z-20">
+        <form id="chat-form" class="relative">
+            <input type="text" id="user-input" 
+                class="w-full glass-ui text-genshin-cream placeholder-genshin-cream/50 rounded-full px-6 py-4 pr-16 focus:outline-none focus:ring-2 focus:ring-genshin-cyan focus:border-transparent shadow-xl transition-all"
+                placeholder="Tulis pesan untuk Paimon..." autocomplete="off">
+            
+            <button type="submit" id="send-btn"
+                class="absolute right-2 top-2 bottom-2 bg-genshin-cyan hover:bg-cyan-400 text-genshin-darker font-bold w-10 h-10 rounded-full transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-genshin-cyan/30">
+                <i class="fa-solid fa-sparkles"></i>
+            </button>
+        </form>
+
+    </div>
+
+    <script>
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const chatContainer = document.getElementById('chat-container');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        let chatHistory = []; 
+
+        function fillInput(text) {
+            userInput.value = text;
+            userInput.focus();
+        }
+
+        function createBubble(text, isUser) {
+            const div = document.createElement('div');
+            div.className = "flex w-full " + (isUser ? "justify-end" : "justify-start");
+            
+            const bubble = document.createElement('div');
+            
+            // --- PERUBAHAN WARNA BUBBLE CHAT ---
+            if (isUser) {
+                // User: Biru tua solid dengan border emas
+                bubble.className = "bg-[#2a2d55] border border-genshin-gold/40 text-genshin-cream px-5 py-3 rounded-3xl rounded-br-md max-w-[80%] leading-relaxed shadow-md";
+            } else {
+                // AI: Glassmorphism transparan dengan border biru/emas tipis
+                bubble.className = "glass-ui text-genshin-cream px-5 py-3 rounded-3xl rounded-bl-md max-w-full prose prose-invert prose-p:leading-relaxed prose-p:text-genshin-cream prose-headings:text-genshin-gold prose-strong:text-genshin-gold prose-pre:bg-genshin-darker/70 prose-pre:border prose-pre:border-genshin-gold/20 prose-pre:rounded-xl shadow-sm";
+            }
+            
+            if (isUser) {
+                bubble.textContent = text;
+            } else {
+                if(text === "LOADING") {
+                    bubble.innerHTML = '<div class="flex items-center gap-2 ml-2"><div class="dot-flashing"></div></div>';
+                    bubble.id = "loading-bubble";
+                } else {
+                    bubble.innerHTML = marked.parse(text);
+                }
+            }
+
+            if (!isUser) {
+                const wrapper = document.createElement('div');
+                wrapper.className = "flex gap-3 max-w-full items-start";
+                // Ikon AI diganti jadi bintang/sparkle emas-cyan
+                wrapper.innerHTML = `
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-genshin-gold to-genshin-cyan flex-shrink-0 mt-1 flex items-center justify-center shadow-lg shadow-genshin-cyan/20">
+                        <img src="/static/Genshin_Impact_HoYoLAB.webp" 
+                             class="w-full h-full rounded-full object-cover bg-genshin-darker">
+                    </div>
+                `;
+                wrapper.appendChild(bubble);
+                div.appendChild(wrapper);
+            } else {
+                div.appendChild(bubble);
+            }
+
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return bubble;
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            if (!welcomeScreen.classList.contains('hidden')) {
+                welcomeScreen.classList.add('hidden');
+                chatContainer.classList.remove('hidden');
+                chatContainer.classList.add('flex', 'flex-col');
+            }
+
+            createBubble(message, true);
+            userInput.value = '';
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+
+            const loadingBubble = createBubble("LOADING", false);
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        history: chatHistory,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+                loadingBubble.parentNode.parentNode.remove();
+                createBubble(data.reply, false);
+
+                chatHistory.push({ role: "user", content: message });
+                chatHistory.push({ role: "model", content: data.reply });
+
+            } catch (error) {
+                loadingBubble.innerHTML = "<span class='text-red-400'>Error connecting to server.</span>";
+            } finally {
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                userInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>

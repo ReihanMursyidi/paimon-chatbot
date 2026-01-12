@@ -1,0 +1,31 @@
+/* Background ala Genshin Impact (Langit malam) */
+body {
+    background: radial-gradient(ellipse at top, #2a2d55 0%, #1a1b33 50%, #121326 100%);
+    color: #f2ece2; /* Warna teks default cream */
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Animasi loading dengan warna emas */
+.dot-flashing {
+    position: relative; width: 6px; height: 6px; border-radius: 5px;
+    background-color: #d3bc8e; color: #d3bc8e;
+    animation: dot-flashing 1s infinite linear alternate;
+    animation-delay: 0.5s;
+}
+.dot-flashing::before, .dot-flashing::after {
+    content: ""; display: inline-block; position: absolute; top: 0;
+    width: 6px; height: 6px; border-radius: 5px; background-color: #d3bc8e; color: #d3bc8e;
+    animation: dot-flashing 1s infinite alternate;
+}
+.dot-flashing::before { left: -10px; animation-delay: 0s; }
+.dot-flashing::after { left: 10px; animation-delay: 1s; }
+@keyframes dot-flashing { 0% { background-color: #d3bc8e; } 50%, 100% { background-color: #8f7c55; } }
+
+/* Efek Glassmorphism untuk UI */
+.glass-ui {
+    background: rgba(26, 27, 51, 0.6); /* Biru tua transparan */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(211, 188, 142, 0.3); /* Border emas tipis */
+}
