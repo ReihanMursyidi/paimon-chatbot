@@ -32,3 +32,19 @@ Dibangun menggunakan **Python (FastAPI)** dan **Google Gemini 2.5 Flash**.
 ├── .env                # API Key (Tidak di-upload ke GitHub)
 ├── requirements.txt    # Daftar library Python
 └── README.md           # Dokumentasi ini
+
+## 💻 Instalasi & Penggunaan
+
+Ikuti langkah-langkah di bawah ini untuk menjalankan **Paimon Chatbot** di komputer lokal Anda.
+
+### 1. Prasyarat (Prerequisites)
+Pastikan Anda sudah menginstall:
+* [Python](https://www.python.org/downloads/) (Versi 3.10 ke atas)
+* [Git](https://git-scm.com/downloads)
+
+### 2. Clone Repository
+Buka terminal (CMD/PowerShell/Terminal) dan jalankan perintah ini:
+
+```bash
+git clone [https://github.com/ReihanMursyidi/PaimonChatbot.git](https://github.com/ReihanMursyidi/PaimonChatbot.git)
+cd PaimonChatbot
